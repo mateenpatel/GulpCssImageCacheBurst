@@ -10,6 +10,7 @@ module.exports = function (options) {
 
         options = options || {};
         var self = this;
+        var fileName = file.path.split(path.sep).pop();
 
         if (file.isNull()) {
             // nothing to do
