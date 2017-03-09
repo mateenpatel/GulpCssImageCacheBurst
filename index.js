@@ -21,12 +21,15 @@ module.exports = function (options) {
             self.emit('error', new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
             return callback(null, file);
         } else if (file.isBuffer()) {
-            // file.contents is a Buffer - https://nodejs.org/api/buffer.html
             self.emit('error', new PluginError(PLUGIN_NAME, 'Buffers not supported!'));
+            return callback(null, file);
+        }
 
-            // or, if you can handle Buffers:
-            //file.contents = ...
-            //return callback(null, file);
+        // check if it is CSS file
+        if (!/^\.css?$/.test(path.extname(file.path))) {
+            gutil.log(gutil.colors.red('[WARN] file ' + fileName + ' is not a css file'));
+            this.push(file);
+            return callback(null, file);
         }
     });
 };
