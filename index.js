@@ -2,6 +2,7 @@
 var path = require('path');
 var fs = require('fs');
 var gutil = require('gulp-util');
+var through = require("through2");
 
 var PLUGIN_NAME = 'gulp-css-image-cache-burst';
 
@@ -21,9 +22,6 @@ module.exports = function (options) {
 
         if (file.isStream()) {
             self.emit('error', new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
-            return callback();
-        } else if (file.isBuffer()) {
-            self.emit('error', new PluginError(PLUGIN_NAME, 'Buffers not supported!'));
             return callback();
         }
 
