@@ -10,7 +10,7 @@
   },
   "author": {
     "name": "Mateen Patel",
-    "email": hiddenwatch@gmail.com"
+    "email": "hiddenwatch@gmail.com"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -21,7 +21,7 @@
   "keywords": [
     "gulpplugin",
 	"cache bursting",
-	"cache burst"
+	"cache burst",
     "image version",
     "css"
   ],
