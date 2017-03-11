@@ -1,6 +1,6 @@
 {
   "name": "gulp-css-image-cache-burst",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Adds cache burst parameter in URL for images in css file",
   "homepage": "https://github.com/mateenpatel/GulpCssImageCacheBurst",
   "license": "MIT",
