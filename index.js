@@ -10,7 +10,8 @@ module.exports = function (options) {
 
         options = options || {};
         var self = this;
-        var fileName = file.path.split(path.sep).pop();
+        var parameterName = options.name || 'v';
+        var parameterValue = options.value || new Date().valueOf();
 
         if (file.isNull()) {
             // nothing to do
@@ -26,6 +27,8 @@ module.exports = function (options) {
             return callback();
         }
 
+        var fileName = file.path.split(path.sep).pop();
+
         // check if it is CSS file
         if (!/^\.css?$/.test(path.extname(file.path))) {
             gutil.log(gutil.colors.red('[WARN] file ' + fileName + ' is not a css file'));
@@ -33,23 +36,33 @@ module.exports = function (options) {
             return callback();
         }
 
-        var cssContent = file.contents.toString();
+        var cssFileContent = file.contents.toString();
 
-        var urlRegex = /url\("?([^\)"]+)"?\)/g;      
+        var urlRegex = /url\("?([^\)"]+)"?\)/g;
         // The format of a URI value is 'url(' followed by optional white space followed by an optional single quote (') 
         // or double quote (") character followed by the URI itself, followed by an optional single quote (') or double quote (") character 
         // followed by optional white space followed by ')'. The two quote characters must be the same.
         // https://www.w3.org/TR/CSS2/syndata.html#uri
 
-        cssContent = cssContent.replace(urlRegex, function (str, url) {
+        cssFileContent = cssFileContent.replace(urlRegex, function (str, url) {
 
+            // remove white space
+            url = url.replace(/\?[\s\S]*$/, "").trim();
+            // remove single or double quote
+            url = url.replace(/['"]*/g, "");
+
+
+            if (url.indexOf("base64,") > -1 || url.indexOf("about:blank") > -1 || url.indexOf("http://") > -1 || url === '/') {
+                return str;
+            }
+
+            return "url(" + url + "?" + parameterName + "=" + parameterValue + ")";
 
         });
 
 
-        file.contents = new Buffer(cssContent);
+        file.contents = new Buffer(cssFileContent);
         self.push(file);
         callback();
-
     });
 };
