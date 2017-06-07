@@ -41,20 +41,21 @@ module.exports = function (options) {
         // or double quote (") character followed by the URI itself, followed by an optional single quote (') or double quote (") character 
         // followed by optional white space followed by ')'. The two quote characters must be the same.
         // https://www.w3.org/TR/CSS2/syndata.html#uri
-
         cssFileContent = cssFileContent.replace(urlRegex, function (str, url) {
 
+            var queryParam = url.split('?');
             // remove white space
             url = url.replace(/\?[\s\S]*$/, "").trim();
             // remove single or double quote
             url = url.replace(/['"]*/g, "");
 
-
             if (url.indexOf("base64,") > -1 || url.indexOf("about:blank") > -1 || url.indexOf("http://") > -1 || url === '/') {
                 return str;
             }
-
-            return "url(" + url + "?" + parameterName + "=" + parameterValue + ")";
+            var queryString  = queryParam.length <2                ?
+                               "?" + parameterName + "=" + parameterValue :
+                               "?" + queryParam[1] + '&' + parameterName + "=" + parameterValue ;
+            return "url(" + url + queryString +")";
 
         });
 
